@@ -1,13 +1,14 @@
 package com.library.librarySystem.controller;
 
 import com.library.librarySystem.entity.Book;
+import com.library.librarySystem.model.BookDTO;
 import com.library.librarySystem.model.Result;
 import com.library.librarySystem.service.BookEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -31,13 +32,13 @@ public class BookController {
     }
     @RequestMapping(value = "/insertbook",method = RequestMethod.POST)
     @ResponseBody
-    public Result handleBook(@RequestParam String name, @RequestParam String author){
-        int res = bookEntryService.insert(name,author);
+    public Result handleBook(@RequestBody BookDTO bookDTO){
+        int res = bookEntryService.insert(bookDTO.getName(), bookDTO.getAuthor());
         Result result = new Result("","fail");
         try{
             if(res==0)
                 return result;
-            result.setName(name);
+            result.setName(bookDTO.getName());
             result.setResult("success");
             return result;
         }catch (NullPointerException e){
